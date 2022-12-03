@@ -3,6 +3,8 @@ file = open('input.txt', 'r')
 lines: list[str] = file.readlines()
 file.close()
 
+## Part 1
+
 # Types as in Pokemon types
 # Really a supereffective chart
 type_chart = {
@@ -32,9 +34,9 @@ shape_map = {
 total_score = 0
 
 for line in lines:
-  openent_option, my_option = line.replace("\n", "").split(" ") # ex. B Z
+  opponent_option, my_option = line.replace("\n", "").split(" ") # ex. B Z
 
-  oponent_shape = shape_map[openent_option]
+  oponent_shape = shape_map[opponent_option]
   my_shape = shape_map[my_option]
 
   # If we chose the same shape, it's a draw
@@ -54,3 +56,50 @@ for line in lines:
     total_score += type_chart[my_shape]['value']
 
 print(f"Total Points: {total_score}")
+
+## Part 2
+
+total_score = 0
+
+# If I need to lose, this is a dictionary
+# to map the losing option to my opponent's selection
+lose_map = {
+  'Rock': 'Scissors',
+  'Paper': 'Rock',
+  'Scissors': 'Paper'
+}
+
+# If I need to win, this is a dictionary
+# to map the win option to my opponent's selection
+win_map = {
+  'Rock': 'Paper',
+  'Paper': 'Scissors',
+  'Scissors': 'Rock'
+}
+
+point_values = {
+  'Rock': 1,
+  'Paper': 2,
+  'Scissors': 3
+}
+
+for line in lines:
+  opponent_option, task = line.replace("\n", "").split(" ") # ex. B Z
+
+  oponent_shape = shape_map[opponent_option]
+  
+  # Lose condition
+  if task == "X":
+    total_score += point_values[lose_map[oponent_shape]]
+    continue
+
+  # Draw condition
+  if task == "Y":
+    total_score += point_values[oponent_shape] + 3
+    continue
+
+  # Win condition
+  if task == "Z":
+    total_score += point_values[win_map[oponent_shape]] + 6
+
+print(f"Total score: {total_score}")
