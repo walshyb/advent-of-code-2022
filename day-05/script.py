@@ -14,7 +14,7 @@ stacks = [[] for x in range(9)]
 # Iterate over the stacks in the input in reverse order.
 # This is because if we built the stacks top down and called #append over #insert (like i did),
 # we'd be building the arrays backwards.
-for i in range(7, 0, -1):
+for i in range(7, -1, -1):
   # Get and clean the line
   line = lines[i].replace("\n", "")
 
@@ -29,9 +29,9 @@ for i in range(7, 0, -1):
     if crate[1] != ' ':
       stacks[current_stack_index].append(crate[1])
     
-#print(stacks)
-
+# Starting from line 10 to the end
 for i in range(10, len(lines)):
+  # Read instruction
   instruction = lines[i].replace("\n", "")
   index_of_f = instruction.index(' f')
 
@@ -44,23 +44,15 @@ for i in range(10, len(lines)):
   from_stack = stacks[from_stack_index]
   to_stack = stacks[to_stack_index]
 
-  print(f"AoC: {amount_of_crates}, FS: {from_stack_index+1}, TS: {to_stack_index+1}, ")
-
+  # Pop off amount of crates from from_stack
+  # Add them to to_stack
   for _ in range(0, amount_of_crates):
     item = from_stack.pop()
     to_stack.append(item)
 
-    # print(f"Item: {item}, FS: {from_stack_index + 1}, TS: {to_stack_index + 1}, AoC: {amount_of_crates}")
-  
-  print(stacks)
 
-
-
+# Build result
 result = ''
 for s in stacks:
-  if len(s):
-    result += s[len(s) - 1]
+  result += s[len(s) - 1]
 print(result)
-
-
-
