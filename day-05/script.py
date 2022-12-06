@@ -28,31 +28,62 @@ for i in range(7, -1, -1):
 
     if crate[1] != ' ':
       stacks[current_stack_index].append(crate[1])
-    
-# Starting from line 10 to the end
-for i in range(10, len(lines)):
-  # Read instruction
-  instruction = lines[i].replace("\n", "")
-  index_of_f = instruction.index(' f')
 
-  amount_of_crates = int(instruction[5:index_of_f])
-  to_stack_index = int(instruction[len(instruction) - 1]) - 1 # I'm not coding to account for double digit stacks
+def part1():
+  # Starting from line 10 to the end
+  for i in range(10, len(lines)):
+    # Read instruction
+    instruction = lines[i].replace("\n", "")
+    index_of_f = instruction.index(' f')
 
-  index_of_m = instruction.index('m ') + 2
-  from_stack_index = int(instruction[index_of_m]) - 1
+    amount_of_crates = int(instruction[5:index_of_f])
+    to_stack_index = int(instruction[len(instruction) - 1]) - 1 # I'm not coding to account for double digit stacks
 
-  from_stack = stacks[from_stack_index]
-  to_stack = stacks[to_stack_index]
+    index_of_m = instruction.index('m ') + 2
+    from_stack_index = int(instruction[index_of_m]) - 1
 
-  # Pop off amount of crates from from_stack
-  # Add them to to_stack
-  for _ in range(0, amount_of_crates):
-    item = from_stack.pop()
-    to_stack.append(item)
+    from_stack = stacks[from_stack_index]
+    to_stack = stacks[to_stack_index]
 
+    # Pop off amount of crates from from_stack
+    # Add them to to_stack
+    for _ in range(0, amount_of_crates):
+      item = from_stack.pop()
+      to_stack.append(item)
 
-# Build result
-result = ''
-for s in stacks:
-  result += s[len(s) - 1]
-print(result)
+  # Build result
+  result = ''
+  for s in stacks:
+    result += s[len(s) - 1]
+  print(result)
+
+#part1()
+
+def part2():
+  # Starting from line 10 to the end
+  for i in range(10, len(lines)):
+    # Read instruction
+    instruction = lines[i].replace("\n", "")
+    index_of_f = instruction.index(' f')
+
+    amount_of_crates = int(instruction[5:index_of_f])
+    to_stack_index = int(instruction[len(instruction) - 1]) - 1 # I'm not coding to account for double digit stacks
+
+    index_of_m = instruction.index('m ') + 2
+    from_stack_index = int(instruction[index_of_m]) - 1
+
+    from_stack = stacks[from_stack_index]
+    to_stack = stacks[to_stack_index]
+
+    grabbed_containers = from_stack[len(from_stack) - amount_of_crates:]
+    stacks[from_stack_index] = from_stack[slice(len(from_stack) - amount_of_crates)]
+
+    stacks[to_stack_index] = to_stack + grabbed_containers
+
+  # Build result
+  result = ''
+  for s in stacks:
+    result += s[len(s) - 1]
+  print(result)
+
+part2()
