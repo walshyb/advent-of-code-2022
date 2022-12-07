@@ -8,9 +8,9 @@ def solve(length_of_message: int):
   queue = list(line[:length_of_message])
   local = []
 
-  # O(n) time complexity
+  # O(n) time complexity or O(n * m) with m being message size
   for i in range(length_of_message, len(line)):
-    # O(1) to convert array of constant size to set? I think? So constant time?
+    # O(1) to convert array of constant size to set? I think? So constant time? Maybe O(m)
     if len(local) == length_of_message or len(set(queue)) == length_of_message:
       print(i)
       break
