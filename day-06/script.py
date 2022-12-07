@@ -10,7 +10,7 @@ def solve(length_of_message: int):
 
   # O(n) time complexity
   for i in range(length_of_message, len(line)):
-    # O(1) to convert array of size 4 or 14 to set? I think? So constant time?
+    # O(1) to convert array of constant size to set? I think? So constant time?
     if len(local) == length_of_message or len(set(queue)) == length_of_message:
       print(i)
       break
