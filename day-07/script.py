@@ -1,4 +1,5 @@
 from collections import defaultdict
+from copy import deepcopy 
 
 # Read input
 file = open('input.txt', 'r')
@@ -77,42 +78,97 @@ for index, line in enumerate(lines):
 
 
 # dfs dfs dfs dfs dfs dfs dfs
-# WOOOO
+# WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+# Go through tree and total up the sizes of each dir so their 
+# sizes are accurate and include the size of their subdirs
 to_find = [head]
+already_seen = set()
 
 while to_find:
   current_node = to_find.pop()
   current_size = current_node.size
+  parent = current_node.parent
+
+  #print(f"{current_node.dir_name} {already_seen} {[x.dir_name for x in to_find]}")
+
+  if current_node.dir_name in already_seen:
+    continue
+
+  if len(current_node.subdirs) == 0: 
+    parent.size += current_node.size
+    already_seen.add(current_node.dir_name)
+    if parent.parent:
+      to_find.append(parent)
+    continue
+
+  all_seen = True
+
+  for subdir_name in current_node.subdirs:
+    subdir = current_node.subdirs[subdir_name]
+    if subdir_name not in already_seen:
+      all_seen = False
+      skip = False
+      for x in to_find:
+        if x.dir_name == subdir_name:
+          skip = True
+          break
+
+      if not skip:
+        to_find.append(subdir)
 
   # start backtracking i hope
-  if len(current_node.subdirs) == 0:
+  #if len(current_node.subdirs) == 0: 
+  if all_seen and parent:
+    #if parent and current_node.dir_name in parent.subdirs:
+    if parent:
+      parent.size += current_node.size
+      #parent.subdirs.pop(current_node.dir_name)
+      already_seen.add(current_node.dir_name)
+      if parent.parent:
+        to_find.append(parent)
 
-    parent = current_node.parent
-    local_sum = current_size 
-    while parent:
-      parent.size += local_sum
+total_size = head.size
+print(f"Total size: {total_size}")
 
-      local_sum = parent.size
-      parent = parent.parent
+def part1():
+  to_find = [head]
+  sum = 0
 
-  for subdir_name in current_node.subdirs:
-    subdir = current_node.subdirs[subdir_name]
-    to_find.append(subdir)
-  
+  # If I knew how to backtrack properly I wouldn't have to DFS twice :(
+  while to_find:
+    current_node = to_find.pop()
+    #print(f"Current Node: {current_node.path}, subdirs: {current_node.subdirs.keys()}, size: {current_node.size}")
+    if current_node.size < 100000:
+      sum += current_node.size
 
-to_find = [head]
-already_seen = []
-sum = 0
+    for subdir_name in current_node.subdirs:
+      subdir = current_node.subdirs[subdir_name]
+      to_find.append(subdir)
 
-# If I knew how to backtrack properly I wouldn't have to DFS twice :(
-while to_find:
-  current_node = to_find.pop()
-  #print(f"Current Node: {current_node.path}, subdirs: {current_node.subdirs.keys()}, size: {current_node.size}")
-  if current_node.size < 100000:
-    sum += current_node.size
+  print(sum)
 
-  for subdir_name in current_node.subdirs:
-    subdir = current_node.subdirs[subdir_name]
-    to_find.append(subdir)
+#part1()
 
-print(sum)
+def part2():
+  to_find = [head]
+  sizes = []
+
+  while to_find:
+    current_node = to_find.pop()
+    sizes.append(current_node.size)
+
+    for subdir_name in current_node.subdirs:
+      subdir = current_node.subdirs[subdir_name]
+      to_find.append(subdir)
+
+  sizes.sort()
+
+  print(sizes)
+  free_space = 70000000 - total_size # 21618835 
+  for size in sizes:
+    if size + free_space >= 30000000:
+      print(size)
+      break
+
+
+part2()
