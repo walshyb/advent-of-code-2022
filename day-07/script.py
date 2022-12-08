@@ -79,7 +79,6 @@ for index, line in enumerate(lines):
 # dfs dfs dfs dfs dfs dfs dfs
 # WOOOO
 to_find = [head]
-sum = 0
 
 while to_find:
   current_node = to_find.pop()
@@ -88,15 +87,10 @@ while to_find:
   # start backtracking i hope
   if len(current_node.subdirs) == 0:
 
-    if current_size < 100000:
-      sum += current_size
-
     parent = current_node.parent
     local_sum = current_size 
     while parent:
       parent.size += local_sum
-      if parent.size < 100000:
-        sum += local_sum
 
       local_sum = parent.size
       parent = parent.parent
@@ -104,15 +98,7 @@ while to_find:
   for subdir_name in current_node.subdirs:
     subdir = current_node.subdirs[subdir_name]
     to_find.append(subdir)
-
-
-print('oy')
-print(sum)
-
-
-# print('==')
-# # sum of all dirs's sizes who's size is over 100000
-# sum = 0
+  
 
 to_find = [head]
 already_seen = []
@@ -125,11 +111,8 @@ while to_find:
   if current_node.size < 100000:
     sum += current_node.size
 
-
   for subdir_name in current_node.subdirs:
     subdir = current_node.subdirs[subdir_name]
     to_find.append(subdir)
 
-
-print('true sum')
 print(sum)
