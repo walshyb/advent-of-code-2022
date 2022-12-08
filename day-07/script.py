@@ -97,7 +97,7 @@ while to_find:
     parent.size += current_node.size
     already_seen.add(current_node)
     if parent.parent:
-      to_find.append(parent)
+      to_find.append(parent.parent)
     continue
 
   all_seen = True
@@ -147,7 +147,7 @@ def part1():
 
   print(sum)
 
-part1()
+#part1()
 
 def part2():
   to_find = [head]
@@ -164,11 +164,10 @@ def part2():
   sizes.sort()
 
   print(sizes)
-  free_space = 70000000 - total_size 
+  free_space = 70000000 - total_size # 27919656
   for size in sizes:
-    if size - free_space <= 30000000:
+    if size + free_space >= 30000000:
       print(size)
       break
 
-
-#part2()
+part2()
