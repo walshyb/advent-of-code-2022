@@ -65,7 +65,7 @@ for index, line in enumerate(lines):
       continue
   
     # ls instruction, do nothing
-    if item[2] == 's':
+    if item[2] == 'l':
       continue
     
     ## Shouldn't get here
@@ -86,17 +86,16 @@ already_seen = set()
 
 while to_find:
   current_node = to_find.pop()
-  current_size = current_node.size
   parent = current_node.parent
 
   #print(f"{current_node.dir_name} {already_seen} {[x.dir_name for x in to_find]}")
 
-  if current_node.dir_name in already_seen:
+  if current_node in already_seen:
     continue
 
   if len(current_node.subdirs) == 0: 
     parent.size += current_node.size
-    already_seen.add(current_node.dir_name)
+    already_seen.add(current_node)
     if parent.parent:
       to_find.append(parent)
     continue
@@ -105,27 +104,28 @@ while to_find:
 
   for subdir_name in current_node.subdirs:
     subdir = current_node.subdirs[subdir_name]
-    if subdir_name not in already_seen:
-      all_seen = False
-      skip = False
-      for x in to_find:
-        if x.dir_name == subdir_name:
-          skip = True
-          break
+    if subdir in already_seen:
+      continue
 
-      if not skip:
-        to_find.append(subdir)
+    all_seen = False
+    skip = False
+
+    for x in to_find:
+      if x.dir_name == subdir_name:
+        skip = True
+        break
+
+    if not skip and subdir not in already_seen:
+      to_find.append(subdir)
 
   # start backtracking i hope
   #if len(current_node.subdirs) == 0: 
-  if all_seen and parent:
-    #if parent and current_node.dir_name in parent.subdirs:
-    if parent:
-      parent.size += current_node.size
-      #parent.subdirs.pop(current_node.dir_name)
-      already_seen.add(current_node.dir_name)
-      if parent.parent:
-        to_find.append(parent)
+  if all_seen:
+    parent.size += current_node.size
+    #parent.subdirs.pop(current_node.dir_name)
+    already_seen.add(current_node)
+    if parent.parent:
+      to_find.append(parent)
 
 total_size = head.size
 print(f"Total size: {total_size}")
@@ -147,7 +147,7 @@ def part1():
 
   print(sum)
 
-#part1()
+part1()
 
 def part2():
   to_find = [head]
@@ -164,11 +164,11 @@ def part2():
   sizes.sort()
 
   print(sizes)
-  free_space = 70000000 - total_size # 21618835 
+  free_space = 70000000 - total_size 
   for size in sizes:
-    if size + free_space >= 30000000:
+    if size - free_space <= 30000000:
       print(size)
       break
 
 
-part2()
+#part2()
