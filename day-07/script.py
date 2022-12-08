@@ -1,6 +1,3 @@
-from collections import defaultdict
-from copy import deepcopy 
-
 # Read input
 file = open('input.txt', 'r')
 lines: list[str] = file.readlines()
