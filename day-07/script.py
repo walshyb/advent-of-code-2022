@@ -79,39 +79,57 @@ for index, line in enumerate(lines):
 # dfs dfs dfs dfs dfs dfs dfs
 # WOOOO
 to_find = [head]
-already_seen = []
+sum = 0
 
 while to_find:
   current_node = to_find.pop()
+  current_size = current_node.size
 
-  if current_node in already_seen:
-    continue
+  # start backtracking i hope
+  if len(current_node.subdirs) == 0:
 
-  already_seen.append(current)
+    if current_size < 100000:
+      sum += current_size
+
+    parent = current_node.parent
+    local_sum = current_size 
+    while parent:
+      parent.size += local_sum
+      if parent.size < 100000:
+        sum += local_sum
+
+      local_sum = parent.size
+      parent = parent.parent
 
   for subdir_name in current_node.subdirs:
     subdir = current_node.subdirs[subdir_name]
     to_find.append(subdir)
-    current_node.size += subdir.size
 
 
-# sum of all dirs's sizes who's size is over 100000
-sum = 0
+print('oy')
+print(sum)
+
+
+# print('==')
+# # sum of all dirs's sizes who's size is over 100000
+# sum = 0
 
 to_find = [head]
 already_seen = []
+sum = 0
 
 # If I knew how to backtrack properly I wouldn't have to DFS twice :(
 while to_find:
   current_node = to_find.pop()
+  #print(f"Current Node: {current_node.path}, subdirs: {current_node.subdirs.keys()}, size: {current_node.size}")
+  if current_node.size < 100000:
+    sum += current_node.size
 
-  if current_node in already_seen:
-    continue
-
-  already_seen.append(current_node)
 
   for subdir_name in current_node.subdirs:
     subdir = current_node.subdirs[subdir_name]
     to_find.append(subdir)
-  
-    print(f"{subdir.path} size: {subdir.size}")
+
+
+print('true sum')
+print(sum)
