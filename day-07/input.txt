@@ -13,6 +13,10 @@ dir e
 $ cd e
 $ ls
 584 i
+dir q
+$ cd q
+123 adc.yo
+$ cd ..
 $ cd ..
 $ cd ..
 $ cd d

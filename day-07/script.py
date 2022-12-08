@@ -18,16 +18,15 @@ file.close()
 # Some kind of once over method and keeping track of values. idk
 # Flat tree (array)
 class Node:
-  parent = None
-  dir_name = ''
-  path = ''
-  subdirs = {}
-  size = 0
-
   def __init__(self, dir_name, parent):
-    self.dir_name += dir_name
-    self.path += f"/{dir_name}"
+    self.path = ''
+    self.dir_name = dir_name
     self.parent = parent
+    self.size = 0
+    self.subdirs = {}
+
+    if dir_name != '/' and parent:
+      self.path = f"{parent.path}/{dir_name}"
   
   def add_subdir(self, dir_name):
     self.subdirs[dir_name] = Node(dir_name, self)
@@ -56,8 +55,10 @@ for index, line in enumerate(lines):
       dir_name = item.split(' ')[2]
 
       if dir_name == '..':
+        #print(f"update current from {current.dir_name} to {current.parent.dir_name}")
         current = current.parent
       else:
+        #print(f"update current from {current.dir_name} to {current.find_subdir(dir_name).dir_name}")
         current = current.find_subdir(dir_name)
 
       continue
@@ -86,27 +87,31 @@ while to_find:
   if current_node in already_seen:
     continue
 
-  if len(current_node.subdirs) == 0:
-    current_node.parent.size += current_node.size
+  already_seen.append(current)
 
   for subdir_name in current_node.subdirs:
     subdir = current_node.subdirs[subdir_name]
     to_find.append(subdir)
-    already_seen.append(subdir)
+    current_node.size += subdir.size
 
+
+# sum of all dirs's sizes who's size is over 100000
+sum = 0
 
 to_find = [head]
 already_seen = []
 
+# If I knew how to backtrack properly I wouldn't have to DFS twice :(
 while to_find:
   current_node = to_find.pop()
 
   if current_node in already_seen:
     continue
 
+  already_seen.append(current_node)
+
   for subdir_name in current_node.subdirs:
     subdir = current_node.subdirs[subdir_name]
     to_find.append(subdir)
-    already_seen.append(subdir)
   
     print(f"{subdir.path} size: {subdir.size}")
