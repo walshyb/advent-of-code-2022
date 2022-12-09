@@ -95,8 +95,8 @@ def part2():
         last_head_pos = temp
         pass
 
-      print_board(20, poses)
-      print('=============')
+      # print_board(20, poses)
+      # print('=============')
 
       # Update the rest
       for index in range(2, len(poses)):
@@ -109,6 +109,7 @@ def part2():
         if max(hx, tx) - min(hx, tx) > 1 or max(hy, ty) - min(hy, ty) > 1:
           # Column and row are different, go diaganol
           if abs(hx-tx) > 0 and abs(hy-ty) > 0:
+            # If they are still in the same column or row
             x_change = 1 if hx > tx else -1
             y_change = 1 if hy > ty else -1
             temp = poses[index]
@@ -116,19 +117,29 @@ def part2():
             last_head_pos = temp
             #print_board(20, poses)
           else:
-            temp = poses[index]
-            # else go to last position
-            poses[index] = last_head_pos
-            last_head_pos = temp 
+            if hx == tx:
+              y_change = 1 if hy > ty else -1
+              temp = poses[index]
+              poses[index] = (poses[index][0], poses[index][1] + y_change)
+              last_head_pos = temp
+            elif hy == ty:
+              x_change = 1 if hx > tx else -1
+              temp = poses[index]
+              poses[index] = (poses[index][0] + x_change, poses[index][1])
+              last_head_pos = temp
+            # temp = poses[index]
+            # # else go to last position
+            # poses[index] = last_head_pos
+            # last_head_pos = temp 
 
-          print_board(20, poses)
-          print('===========')
+          # print_board(20, poses)
+          # print('===========')
         else:
           break
       visited_tail_pos.add(poses[9])
-    print_board(20, poses)
+    # print_board(20, poses)
     # print('=====================')
-    print('next step ==================================')
+    # print('next step ==================================')
       
   print(len(visited_tail_pos))
 
