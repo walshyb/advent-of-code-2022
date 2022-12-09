@@ -53,8 +53,19 @@ def part1():
 
 #part1()
 
+def print_board(board, p):
+  for i in range(0, board):
+    for j in range(0, board):
+      char = '.'
+      if (i,j) in p:
+        char = p.index((i,j))
+      if i == 20 and j == 20:
+        char = 's'
+      print(char,end="")
+    print()
+
 def part2():
-  poses = [(1000,1000) for _ in range(0, 10)]
+  poses = [(20,20) for _ in range(0, 10)]
 
   visited_tail_pos = set()
   visited_tail_pos.add(poses[9])
@@ -75,12 +86,16 @@ def part2():
       tx = poses[1][0]
       ty = poses[1][1]
 
-      print(f"New head pos: {new_head_pos}")
+      # print(f"New head pos: {new_head_pos}")
 
       if max(hx, tx) - min(hx, tx) > 1 or max(hy, ty) - min(hy, ty) > 1:
-        print(f'Moving 1 {poses[1]} to {last_head_pos}, hx: {hx}, tx: {tx}, {max(hx, tx) - min(hx, tx) > 1} or {max(hy, ty) - min(hy, ty) > 1}')
+        # print(f'Moving 1 {poses[1]} to {last_head_pos}, hx: {hx}, tx: {tx}, {max(hx, tx) - min(hx, tx) > 1} or {max(hy, ty) - min(hy, ty) > 1}')
+        temp = poses[1]
         poses[1] = last_head_pos
+        last_head_pos = temp
+        pass
 
+      #print_board(20, poses)
 
       # Update the rest
       for index in range(2, len(poses)):
@@ -90,35 +105,23 @@ def part2():
         tx = poses[index][0]
         ty = poses[index][1]
 
-        # Here we want to move to the direction that will get us 1 space 
-        # away from the previous position
-
-        # Check top left and top right
-        if hy - ty > 1:
-          print(f'Moving {index} {poses[index]} to {(tx, ty + 1)}')
-          poses[index] = (tx, ty + 1)
-        elif ty - hy > 1:
-          print(f'Moving {index} {poses[index]} to {(tx, ty - 1)}')
-          poses[index] = (tx, ty - 1)
-
-        # Check left and right
-        if hy - ty > 1:
-          print(f'Moving {index} {poses[index]} to {(tx, ty + 1)}')
-          poses[index] = (tx, ty + 1)
-        elif ty - hy > 1:
-          print(f'Moving {index} {poses[index]} to {(tx, ty - 1)}')
-          poses[index] = (tx, ty - 1)
-
-        # Check up and down
-        if hx - tx > 1:
-          print(f'Moving {index} {poses[index]} to {(tx + 1, ty)}')
-          poses[index] = (tx + 1, ty)
-        elif tx - hx > 1:
-          print(f'Moving {index} {poses[index]} to {(tx - 1, ty)}')
-          poses[index] = (tx - 1, ty)
-
+        if max(hx, tx) - min(hx, tx) > 1 or max(hy, ty) - min(hy, ty) > 1:
+          # Column and row are different, go diaganol
+          if abs(hx-tx) > 0 and abs(hy-ty) > 0:
+            x_change = 1 if hx > tx else -1
+            y_change = 1 if hy > ty else -1
+            poses[index] = (poses[index][0] + x_change, poses[index][1] + y_change)
+            #print_board(20, poses)
+          else:
+            temp = poses[index]
+            # else go to last position
+            poses[index] = last_head_pos
+            last_head_pos = temp 
         visited_tail_pos.add(poses[9])
-    print('next step ===================================================')
+
+
+    print_board(40, poses)
+    print('next step ==================================')
       
   print(len(visited_tail_pos))
 
