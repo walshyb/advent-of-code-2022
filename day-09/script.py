@@ -70,76 +70,45 @@ def part2():
   visited_tail_pos = set()
   visited_tail_pos.add(poses[9])
 
+  # for every step
   for line in lines:
     direction, steps = line.replace("\n", '').split(' ')
 
+    # Move the head for each step
     for _ in range(0, int(steps)):
-      last_head_pos = poses[0]
       # Save next head position
-      new_head_pos = move(direction, poses[0])
-      poses[0] = new_head_pos
+      poses[0] = move(direction, poses[0])
 
-      # This bit moves position 1 to be at the last head position, if applicable
-      hx = new_head_pos[0]
-      hy = new_head_pos[1]
-
-      tx = poses[1][0]
-      ty = poses[1][1]
-
-      # print(f"New head pos: {new_head_pos}")
-
-      if max(hx, tx) - min(hx, tx) > 1 or max(hy, ty) - min(hy, ty) > 1:
-        # print(f'Moving 1 {poses[1]} to {last_head_pos}, hx: {hx}, tx: {tx}, {max(hx, tx) - min(hx, tx) > 1} or {max(hy, ty) - min(hy, ty) > 1}')
-        temp = poses[1]
-        poses[1] = last_head_pos
-        last_head_pos = temp
-        pass
-
-      # print_board(20, poses)
-      # print('=============')
-
-      # Update the rest
-      for index in range(2, len(poses)):
+      # Update everything after this head move
+      for index in range(1, len(poses)):
         hx = poses[index-1][0]
         hy = poses[index-1][1]
 
         tx = poses[index][0]
         ty = poses[index][1]
 
-        if max(hx, tx) - min(hx, tx) > 1 or max(hy, ty) - min(hy, ty) > 1:
-          # Column and row are different, go diaganol
-          if abs(hx-tx) > 0 and abs(hy-ty) > 0:
-            # If they are still in the same column or row
-            x_change = 1 if hx > tx else -1
-            y_change = 1 if hy > ty else -1
-            temp = poses[index]
-            poses[index] = (poses[index][0] + x_change, poses[index][1] + y_change)
-            last_head_pos = temp
-            #print_board(20, poses)
-          else:
-            if hx == tx:
-              y_change = 1 if hy > ty else -1
-              temp = poses[index]
-              poses[index] = (poses[index][0], poses[index][1] + y_change)
-              last_head_pos = temp
-            elif hy == ty:
-              x_change = 1 if hx > tx else -1
-              temp = poses[index]
-              poses[index] = (poses[index][0] + x_change, poses[index][1])
-              last_head_pos = temp
-            # temp = poses[index]
-            # # else go to last position
-            # poses[index] = last_head_pos
-            # last_head_pos = temp 
+        x_change = 1 if hx > tx else -1
+        y_change = 1 if hy > ty else -1
 
-          # print_board(20, poses)
-          # print('===========')
+        # If the previous item is now more than 1 space away in any direction
+        if max(hx, tx) - min(hx, tx) > 1 or max(hy, ty) - min(hy, ty) > 1:
+          # If both column and row are different positions, go diaganol
+          if abs(hx-tx) > 0 and abs(hy-ty) > 0:
+            poses[index] = (poses[index][0] + x_change, poses[index][1] + y_change)
+          else:
+            # If the current item and the last item are in the same column or row now,
+            # go up down, left or right
+            if hx == tx:
+              poses[index] = (poses[index][0], poses[index][1] + y_change)
+            elif hy == ty:
+              poses[index] = (poses[index][0] + x_change, poses[index][1])
         else:
+          # We can end this loop because since this
+          # item doesn't need to change position, neither does what follows
           break
+
+      # Keep track of any updates to the tail
       visited_tail_pos.add(poses[9])
-    # print_board(20, poses)
-    # print('=====================')
-    # print('next step ==================================')
       
   print(len(visited_tail_pos))
 
