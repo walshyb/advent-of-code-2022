@@ -78,7 +78,7 @@ def part2():
 
     # Move the head for each step
     for _ in range(0, int(steps)):
-      # Save next head position
+      # Move the head
       poses[0] = move(direction, poses[0])
 
       # Update everything after this head move
