@@ -39,9 +39,11 @@ def part1():
       last_head_pos = head_pos
       head_pos = move(direction, head_pos)
       
+      # The head's x and y values
       hx = head_pos[0]
       hy = head_pos[1]
 
+      # The tails's x and y values
       tx = tail_pos[0]
       ty = tail_pos[1]
 
@@ -80,10 +82,13 @@ def part2():
       poses[0] = move(direction, poses[0])
 
       # Update everything after this head move
+      # Start at index 1 because 0 is the head, which was already moved
       for index in range(1, len(poses)):
+        # The previous item's x and y
         hx = poses[index-1][0]
         hy = poses[index-1][1]
 
+        # The current item's x and y
         tx = poses[index][0]
         ty = poses[index][1]
 
