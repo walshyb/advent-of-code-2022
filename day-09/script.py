@@ -72,7 +72,7 @@ def part2():
   visited_tail_pos = set()
   visited_tail_pos.add(poses[9])
 
-  # for every step
+  # for every instruction 
   for line in lines:
     direction, steps = line.replace("\n", '').split(' ')
 
