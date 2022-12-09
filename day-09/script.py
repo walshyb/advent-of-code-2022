@@ -59,13 +59,13 @@ def print_board(board, p):
       char = '.'
       if (i,j) in p:
         char = p.index((i,j))
-      if i == 20 and j == 20:
+      if i == 15 and j == 15:
         char = 's'
       print(char,end="")
     print()
 
 def part2():
-  poses = [(20,20) for _ in range(0, 10)]
+  poses = [(100,70) for _ in range(0, 10)]
 
   visited_tail_pos = set()
   visited_tail_pos.add(poses[9])
@@ -95,7 +95,8 @@ def part2():
         last_head_pos = temp
         pass
 
-      #print_board(20, poses)
+      # print_board(30, poses)
+      # print('=============')
 
       # Update the rest
       for index in range(2, len(poses)):
@@ -117,12 +118,29 @@ def part2():
             # else go to last position
             poses[index] = last_head_pos
             last_head_pos = temp 
-        visited_tail_pos.add(poses[9])
 
-
-    print_board(40, poses)
-    print('next step ==================================')
+          # print_board(30, poses)
+          # print('===========')
+        else:
+          break
+      visited_tail_pos.add(poses[9])
+      # print_board(30, poses)
+    # print('=====================')
+    # print('next step ==================================')
       
   print(len(visited_tail_pos))
 
+  def print_tail_path():
+    for i in range(0, 350):
+      for j in range(0, 134):
+        char = '.'
+        if (i,j) in visited_tail_pos:
+          char = '#'
+        print(char,end="")
+      print()
+  # print_tail_path()
+
 part2()
+
+2658 too high
+2567, 2568 too low
