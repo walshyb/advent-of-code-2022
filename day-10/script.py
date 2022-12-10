@@ -13,7 +13,6 @@ def update_signal():
         result += x_value * cycle
         seen_cycles.add(cycle)
 
-
 for line in lines:
     cleaned_line = line.replace("\n", "")
     instruction = cleaned_line.split(' ')[0]
@@ -32,7 +31,6 @@ for line in lines:
 
     cycle += 1
     x_value += instruction_value
-
 
     update_signal()
 
