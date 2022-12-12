@@ -29,7 +29,8 @@ def fetch(x, y):
     return None
   return board[x][y]
 
-
+# any_start param is for part 2
+# that will make it so it tracks steps from any 'a' elevation and not just the start's
 def solve(any_start):
   # Make a queue for our BFS (Breadth first search)
   queue = deque()
