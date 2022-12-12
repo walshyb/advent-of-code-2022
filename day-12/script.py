@@ -33,28 +33,37 @@ seen = set({(start_pos, 0)})
 
 queue.append((start_pos, 0))
 
-while queue:
-  (x,y), steps = queue.popleft()
-  current_height = board[x][y]
+def solve(any_start):
+  while queue:
+    (x,y), steps = queue.popleft()
+    current_height = board[x][y]
 
-  if (x,y) == end_pos:
-    print(steps)
-    break
+    if (x,y) == end_pos:
+      print(steps)
+      break
 
-  neighbors = [(x-1,y), (x+1,y), (x,y-1), (x,y+1)]
+    neighbors = [(x-1,y), (x+1,y), (x,y-1), (x,y+1)]
 
-  for neighbor_pos in neighbors:
-    neighbor_x, neighbor_y = neighbor_pos
-    neighbor = fetch(neighbor_x, neighbor_y)
+    for neighbor_pos in neighbors:
+      neighbor_x, neighbor_y = neighbor_pos
+      neighbor = fetch(neighbor_x, neighbor_y)
 
-    if not neighbor or neighbor_pos in seen:
-      continue
+      step_increase = 1
 
-    # If the neighbor is 1 elevation higher, it's valid
-    # If the neighbor is at max 2 levels lower, it's valid
-    if ord(neighbor) - ord(current_height) == 1:
-      queue.append(((neighbor_x, neighbor_y), steps + 1))
-      seen.add(neighbor_pos)
-    elif ord(current_height) - ord(neighbor) >= 0 and ord(current_height) - ord(neighbor) < 3: 
-      queue.append(((neighbor_x, neighbor_y), steps + 1))
-      seen.add(neighbor_pos)
+      if any_start and current_height == 'a' and neighbor == 'a':
+        step_increase = 0
+
+      if not neighbor or neighbor_pos in seen:
+        continue
+
+      # If the neighbor is 1 elevation higher, it's valid
+      # If the neighbor is at max 2 levels lower, it's valid
+      if ord(neighbor) - ord(current_height) == 1:
+        queue.append(((neighbor_x, neighbor_y), steps + step_increase))
+        seen.add(neighbor_pos)
+      elif ord(current_height) - ord(neighbor) >= 0 and ord(current_height) - ord(neighbor) < 3: 
+        queue.append(((neighbor_x, neighbor_y), steps + step_increase))
+        seen.add(neighbor_pos)
+
+#solve(False) # part 1
+solve(True)   # part 2
