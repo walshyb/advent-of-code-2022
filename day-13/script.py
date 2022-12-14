@@ -23,8 +23,6 @@ def check_list(left_list, right_list):
     return 1
   elif len(right_list) == 0 and len(left_list):
     return 0
-
-  #print('check_list', left_list, right_list)
   
   # Go through our list
   for i in range(len(left_list)):
@@ -34,24 +32,16 @@ def check_list(left_list, right_list):
     try:
       right_value = right_list[i]
     except:
-      print('except 0')
       return 0
-
-    print('loop', left_value, right_value)
 
     # If both values are ints
     if type(left_value) == int and type(right_value) == int:
       if left_value < right_value:
-        print('exit 1')
         return 1
       elif left_value == right_value:
-        print('continue 1')
         continue
       else:
-        print('exit 0')
-        #print(left_list, right_list)
         return 0
-    
 
     # If one value is an int, make it a list
     if type(left_value) == list and type(right_value) == int:
@@ -63,15 +53,14 @@ def check_list(left_list, right_list):
     result = check_list(left_value, right_value)
 
     if result == None:
-      print('continue 2')
       continue
     else:
-      print('exit post', result)
       return result
 
   # If we went through the whole of the left list and there are still right values
   if len(right_list) > len(left_list):
     return 1
+
   return None
 
 
@@ -85,11 +74,5 @@ for index, packet in enumerate(packets):
 
   if check_list(left_packet, right_packet):
     correct_packets += index + 1
-  else:
-    print('====================')
-    print(left_packet)
-    print(right_packet)
-
-    print()
 
 print(correct_packets)
